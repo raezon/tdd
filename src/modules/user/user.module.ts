@@ -15,5 +15,13 @@ import { UserController } from './user.controller';
       useClass: JsonDataRepository, // Use the JsonDataRepository as the implementation
     },
   ],
+  exports: [
+    UserRepository,
+    UserService,
+    {
+      provide: 'DataRepository', // Use the interface directly as the provide token
+      useClass: JsonDataRepository, // Use the JsonDataRepository as the implementation
+    },
+  ],
 })
 export class UserModule {}

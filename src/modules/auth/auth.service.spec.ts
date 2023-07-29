@@ -19,9 +19,9 @@ describe('AuthService', () => {
   });
 
   describe('authenticated', () => {
-    it('user should be able to authenticated with crediantials', () => {
-      const result = service.validateUser('Ammar', 'password123');
-      expect(result).toBe(5);
+    it('user should be able to authenticated with crediantials', async () => {
+      const result = await service.validateUser('Ammar', 'password123');
+      expect(result.username).toBe('Ammar');
     });
   });
 });

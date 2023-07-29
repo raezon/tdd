@@ -39,7 +39,7 @@ describe('UserService', () => {
       const user = await service.findOne(1);
       expect(user).toBeDefined();
       expect(user.id).toBe(1); // Add this line to check the 'name' property
-      expect(user.name).toBe('John'); // Add this line to check the 'name' property
+      expect(user.username).toBe('John'); // Add this line to check the 'name' property
     });
   });
 });

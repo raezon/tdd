@@ -2,15 +2,22 @@
 import { Injectable } from '@nestjs/common';
 
 import { compareSync } from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { User } from '../user/interface/user.interface';
 import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class AuthService {
   constructor(public readonly userRepository: UserRepository) {}
-  validateUser(username: string, password: string): User | null {
-    const user = this.userRepository.find((u) => u.username === username);
-    if (user && compareSync(password, user.password)) {
+  async validateUser(username: string, password: string) {
+    const saltRounds = 10; // The number of salt rounds determines the computational cost (higher value means more secure but slower hashing)
+    const hashedPassword = await bcrypt.hash('password123', saltRounds);
+
+    const user = this.userRepository.findByUsername(username);
+    const isValidPassword = await bcrypt.compare(password, hashedPassword);
+    console.log(user);
+
+    if (user && isValidPassword) {
       // Password matches, return the user object
       return user;
     }
