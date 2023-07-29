@@ -16,4 +16,8 @@ export class UserRepository {
   getUserById(id: number): User | null {
     return this.dataRepository.getById(id);
   }
+
+  find(expression): User | null {
+    return this.dataRepository.getByExpression(expression);
+  }
 }

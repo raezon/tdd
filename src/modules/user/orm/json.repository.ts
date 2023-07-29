@@ -26,4 +26,10 @@ export class JsonDataRepository implements DataRepository<User> {
     const user = data.users.find((user) => user.id == id);
     return user || null;
   }
+  //generic finder
+  getByExpression(expression): User | null {
+    const data = this.getData();
+    const user = data.users.find(expression);
+    return user || null;
+  }
 }

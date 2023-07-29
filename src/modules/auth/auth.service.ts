@@ -1,26 +1,20 @@
+// auth.service.ts
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+
+import { compareSync } from 'bcrypt';
+import { User } from '../user/interface/user.interface';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
-
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  constructor(public readonly userRepository: UserRepository) {}
+  validateUser(username: string, password: string): User | null {
+    const user = this.userRepository.find((u) => u.username === username);
+    if (user && compareSync(password, user.password)) {
+      // Password matches, return the user object
+      return user;
+    }
+    // Invalid credentials, return null
+    return null;
   }
 }
