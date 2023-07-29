@@ -1,12 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
+import { UserRepository } from './user.repository';
+import { JsonDataRepository } from './orm/json.repository';
+import { DataRepository } from './interface/data-repository.interface';
 
 describe('UserService', () => {
   let service: UserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService],
+      providers: [
+        UserRepository,
+        UserService,
+        {
+          provide: 'DataRepository', // Use the interface directly as the provide token
+          useClass: JsonDataRepository, // Use the JsonDataRepository as the implementation
+        },
+      ],
     }).compile();
 
     service = module.get<UserService>(UserService);
@@ -17,18 +27,19 @@ describe('UserService', () => {
   });
 
   describe('users', () => {
-    it('should be found', () => {
-      const users = service.findAll();
+    it('should be found', async () => {
+      const users = await service.findAll();
       expect(users).toBeDefined();
-      expect(users).toBeGreaterThan(0);
+      expect(Array.isArray(users)).toBe(true); // Add this line to check if users is an array
     });
   });
 
   describe('user', () => {
-    it('user with id number 1 should be found', () => {
-      const user = service.findOne(1);
+    it('user with id number 1 should be found', async () => {
+      const user = await service.findOne(1);
       expect(user).toBeDefined();
-      expect(user).toHaveProperty('id', 1);
+      expect(user.id).toBe(1); // Add this line to check the 'name' property
+      expect(user.name).toBe('John'); // Add this line to check the 'name' property
     });
   });
 });

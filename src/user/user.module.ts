@@ -3,14 +3,16 @@ import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserRepository } from './user.repository';
 import { JsonDataRepository } from './orm/json.repository';
+import { UserController } from './user.controller';
 
 @Module({
+  controllers: [UserController],
   providers: [
     UserRepository,
     UserService,
     {
       provide: 'DataRepository', // Use the interface directly as the provide token
-      useValue: JsonDataRepository, // Use the JsonDataRepository as the implementation
+      useClass: JsonDataRepository, // Use the JsonDataRepository as the implementation
     },
   ],
 })
