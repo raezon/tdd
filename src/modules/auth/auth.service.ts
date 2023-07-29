@@ -15,7 +15,6 @@ export class AuthService {
 
     const user = this.userRepository.findByUsername(username);
     const isValidPassword = await bcrypt.compare(password, hashedPassword);
-    console.log(user);
 
     if (user && isValidPassword) {
       // Password matches, return the user object
